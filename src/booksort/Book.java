@@ -1,19 +1,19 @@
 package booksort;
 
+import java.time.LocalDate;
 import java.util.Comparator;
-import java.util.Date;
 
-public class Book implements Comparator<Book> {
+public class Book implements Comparator<Book>{
     String name;
     int totalPage;
     String type;
     double price;
     String author;
-    Date date;
+    LocalDate date;
 
     public Book(){}
 
-    public Book(String name, int totalPage, String type, double price, String author, Date date) {
+    public Book(String name, int totalPage, String type, double price, String author, LocalDate date) {
         this.name = name;
         this.totalPage = totalPage;
         this.type = type;
@@ -24,7 +24,7 @@ public class Book implements Comparator<Book> {
 
     @Override
     public int compare(Book o1, Book o2) {
-        return o1.getName().compareTo(o1.getName());
+        return o1.getName().compareTo(o2.getName());
     }
 
     public String getName() {
@@ -67,11 +67,11 @@ public class Book implements Comparator<Book> {
         this.author = author;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
