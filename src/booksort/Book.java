@@ -1,12 +1,26 @@
 package booksort;
 
 import java.util.Comparator;
+import java.util.Date;
 
 public class Book implements Comparator<Book> {
     String name;
     int totalPage;
     String type;
     double price;
+    String author;
+    Date date;
+
+    public Book(){}
+
+    public Book(String name, int totalPage, String type, double price, String author, Date date) {
+        this.name = name;
+        this.totalPage = totalPage;
+        this.type = type;
+        this.price = price;
+        this.author = author;
+        this.date = date;
+    }
 
     @Override
     public int compare(Book o1, Book o2) {
@@ -43,5 +57,33 @@ public class Book implements Comparator<Book> {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "name='" + name + '\'' +
+                ", totalPage=" + totalPage +
+                ", type='" + type + '\'' +
+                ", price=" + price +
+                ", author='" + author + '\'' +
+                ", date=" + date +
+                '}';
     }
 }
