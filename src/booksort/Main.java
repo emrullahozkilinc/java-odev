@@ -15,7 +15,6 @@ public class Main {
         System.out.println(books.size());
 
         TreeSet<Book> books2 = new TreeSet(new Comparator<Book>() {
-
             @Override
             public int compare(Book o1, Book o2) {
                 return (o1.getTotalPage() > o2.getTotalPage())?1:-1;
