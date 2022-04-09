@@ -1,10 +1,12 @@
 package patikastore;
 
+import patikastore.enums.Brands;
+
 import java.util.Comparator;
 
 public abstract class Brand {
     int id;
-    String name;
+    Brands name;
 
     public int getId() {
         return id;
@@ -14,11 +16,11 @@ public abstract class Brand {
         this.id = id;
     }
 
-    public String getName() {
+    public Brands getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(Brands name) {
         this.name = name;
     }
 }
