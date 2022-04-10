@@ -1,6 +1,7 @@
 package patikastore;
 
 import patikastore.enums.Brands;
+import patikastore.enums.Color;
 import patikastore.enums.Ram;
 import patikastore.enums.Storage;
 
@@ -26,8 +27,12 @@ public class Main {
             switch (choose){
                 case 1:
                     notebookMenu(notebooks);
+                    break;
+                case 2:
+                    phoneMenu(phones);
+                    break;
             }
-            System.out.println(notebooks.toString());
+            System.out.println(phones.toString());
         }
     }
 
@@ -37,9 +42,9 @@ public class Main {
                 "3 - Geri\n" +
                 "0 - Çıkış Yap\n" +
                 "Tercihiniz :");
-        switch (getInput(0, 2)){
+        switch (getInput(0, 3)){
             case 1:
-                addProduct(store);
+                addNotebook(store);
                 break;
             case 2:
                 System.out.print("Silinecek Notebook'ın ID'sini giriniz : ");
@@ -52,6 +57,27 @@ public class Main {
         }
     }
 
+    static void phoneMenu(StoreNode store){
+        System.out.print("1 - Phone Ekle\n" +
+                "2 - Phone Sil\n" +
+                "3 - Geri\n" +
+                "0 - Çıkış Yap\n" +
+                "Tercihiniz :");
+        switch (getInput(0, 3)){
+            case 1:
+                addPhone(store);
+                break;
+            case 2:
+                System.out.print("Silinecek Phone'un ID'sini giriniz : ");
+                store.removeProduct(scanner.nextInt());
+                break;
+            case 3:
+                break;
+            case 0:
+                System.exit(0);
+        }
+    }
+    
     public static short getInput(int min, int max){
         short choose = 0;
         do{
@@ -67,7 +93,7 @@ public class Main {
         return choose;
     }
 
-    static void addProduct(StoreNode store){
+    static void addNotebook(StoreNode store){
         System.out.print("İsim : ");
         String name = scanner.nextLine();
         System.out.print("Marka : ");
@@ -91,5 +117,37 @@ public class Main {
         System.out.print("Ekran Boyutu : ");
         double screenSize = scanner.nextDouble();
         store.addProduct(new Notebook(name, brand, price, discount, amount, ram, storage, screenSize));
+    }
+
+    static void addPhone(StoreNode store){
+        System.out.print("İsim : ");
+        String name = scanner.nextLine();
+        System.out.print("Marka : ");
+        Arrays.asList(Brands.values()).forEach(x->System.out.print((x.ordinal()+1)+"-)"+x.toString()+" "));
+        System.out.println();
+        Brands brand = Brands.values()[getInput(1, Brands.values().length)-1];
+        System.out.print("Fiyat : ");
+        double price = scanner.nextDouble();
+        System.out.print("Indirim Orani : ");
+        double discount = scanner.nextDouble();
+        System.out.print("Miktar : ");
+        int amount = scanner.nextInt();
+        System.out.print("Ram : ");
+        Arrays.asList(Ram.values()).forEach(x->System.out.print((x.ordinal()+1)+"-)"+x.getRam()+" "));
+        System.out.println();
+        Ram ram = Ram.values()[getInput(1, Ram.values().length)-1];
+        System.out.print("Kapasite : ");
+        Arrays.asList(Storage.values()).forEach(x->System.out.print((x.ordinal()+1)+"-)"+x.getStorage()+" "));
+        System.out.println();
+        Storage storage = Storage.values()[getInput(1, Storage.values().length)-1];
+        System.out.print("Ekran Boyutu : ");
+        double screenSize = scanner.nextDouble();
+        System.out.print("Batarya Kapasitesi (mAh) : ");
+        int batteryCapacity = scanner.nextInt();
+        System.out.print("Renk : ");
+        Arrays.asList(Color.values()).forEach(x->System.out.print((x.ordinal()+1)+"-)"+x.toString()+" "));
+        System.out.println();
+        Color color = Color.values()[getInput(1, Color.values().length)-1];
+        store.addProduct(new Phone(name, brand, price, discount, amount, ram, storage, screenSize, batteryCapacity, color));
     }
 }
