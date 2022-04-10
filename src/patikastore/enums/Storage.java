@@ -9,4 +9,7 @@ public enum Storage {
     public String getStorage() {
         return storage;
     }
+
+    @Override
+    public String toString() {return storage;}
 }

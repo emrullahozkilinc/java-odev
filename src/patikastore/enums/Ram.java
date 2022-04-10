@@ -11,4 +11,6 @@ public enum Ram {
         return ram;
     }
 
+    @Override
+    public String toString() {return ram;}
 }
