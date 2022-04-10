@@ -4,9 +4,11 @@ import patikastore.enums.Brands;
 
 import java.util.Comparator;
 
-public abstract class Brand {
+public class Brand {
     int id;
     Brands name;
+
+
 
     public int getId() {
         return id;

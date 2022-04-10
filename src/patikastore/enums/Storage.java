@@ -6,4 +6,7 @@ public enum Storage {
     private Storage(String storage) {
         this.storage = storage;
     }
+    public String getStorage() {
+        return storage;
+    }
 }

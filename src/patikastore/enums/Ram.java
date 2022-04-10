@@ -6,4 +6,9 @@ public enum Ram {
     private Ram(String ram) {
         this.ram = ram;
     }
+
+    public String getRam() {
+        return ram;
+    }
+
 }
