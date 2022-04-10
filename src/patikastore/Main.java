@@ -1,13 +1,8 @@
 package patikastore;
 
-import patikastore.enums.Brands;
-import patikastore.enums.Color;
-import patikastore.enums.Ram;
-import patikastore.enums.Storage;
+import patikastore.enums.*;
 
-import java.util.Arrays;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
@@ -30,6 +25,12 @@ public class Main {
                     break;
                 case 2:
                     phoneMenu(phones);
+                    break;
+                case 3:
+                    Set<Brands> brs = new TreeSet(new BrandsComparator());
+                    brs.addAll(Arrays.asList(Brands.values()));
+                    System.out.println("Markalar : ");
+                    brs.forEach(System.out::println);
                     break;
             }
             System.out.println(phones.toString());

@@ -17,8 +17,3 @@ public enum Brands {SAMSUNG(1,"Samsung"), LENOVO(2,"Lenovo"), APPLE(3,"Apple"),
         return name;
     }
 }
-class BrandsComparator implements java.util.Comparator<Brands> {
-    public int compare(Brands o1, Brands o2) {
-        return o1.compareTo(o2);
-    }
-}
