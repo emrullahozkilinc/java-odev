@@ -32,7 +32,6 @@ public class Main {
     }
 
     static void notebookMenu(StoreNode store){
-
         System.out.print("1 - Notebook Ekle\n" +
                 "2 - Notebook Sil\n" +
                 "3 - Geri\n" +

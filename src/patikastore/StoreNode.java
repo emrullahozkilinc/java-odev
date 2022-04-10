@@ -18,15 +18,20 @@ public class StoreNode {
 
     void addProduct(Product p) {
         for (int i = 1;; i++) {
-            try {
-                new ArrayList<Product>(products).get(i-1);
-            }catch (IndexOutOfBoundsException e){
-                System.out.println("Index: " + i);
+            if(!getIds().contains(i)){
                 p.setId(i);
                 products.add(p);
                 return;
             }
         }
+    }
+
+    ArrayList<Integer> getIds(){
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (Product p : products) {
+            ids.add(p.getId());
+        }
+        return ids;
     }
 
     void removeProduct(int id) {
