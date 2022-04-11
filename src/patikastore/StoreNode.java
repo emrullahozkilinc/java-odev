@@ -2,6 +2,7 @@ package patikastore;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.TreeSet;
 
 public class StoreNode {
@@ -36,6 +37,10 @@ public class StoreNode {
 
     void removeProduct(int id) {
         products.remove(products.stream().filter(p -> p.getId() == id).findFirst().get());
+    }
+
+    Product getProduct(int id) {
+        return products.stream().filter(p -> p.getId() == id).findFirst().orElse(null);
     }
 
     public TreeSet<Product> getProducts() {

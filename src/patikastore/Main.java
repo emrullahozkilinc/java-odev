@@ -2,6 +2,7 @@ package patikastore;
 
 import patikastore.enums.*;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class Main {
@@ -12,38 +13,36 @@ public class Main {
         StoreNode phones = new StoreNode();
 
         while (true){
-            System.out.print("PatikaStore Ürün Yönetim Paneli !\n" +
-                    "1 - Notebook İşlemleri\n" +
-                    "2 - Cep Telefonu İşlemleri\n" +
-                    "3 - Marka Listele\n" +
-                    "0 - Çıkış Yap\n" +
-                    "Tercihiniz :");
+            System.out.print("""
+                    PatikaStore Ürün Yönetim Paneli !
+                    1 - Notebook İşlemleri
+                    2 - Cep Telefonu İşlemleri
+                    3 - Marka Listele
+                    0 - Çıkış Yap
+                    Tercihiniz :""");
             short choose = getInput(0, 3);
-            switch (choose){
-                case 1:
-                    notebookMenu(notebooks);
-                    break;
-                case 2:
-                    phoneMenu(phones);
-                    break;
-                case 3:
-                    Set<Brands> brs = new TreeSet(new BrandsComparator());
+            switch (choose) {
+                case 1 -> notebookMenu(notebooks);
+                case 2 -> phoneMenu(phones);
+                case 3 -> {
+                    TreeSet brs = new TreeSet(new BrandsComparator());
                     brs.addAll(Arrays.asList(Brands.values()));
                     System.out.println("Markalar : ");
                     brs.forEach(System.out::println);
-                    break;
+                }
             }
-            System.out.println(phones.toString());
+            System.out.println(phones);
         }
     }
 
     static void notebookMenu(StoreNode store){
-        System.out.print("1 - Notebook Ekle\n" +
-                "2 - Notebook Sil\n" +
-                "3 - Notebook Listele\n" +
-                "4 - Geri\n" +
-                "0 - Çıkış Yap\n" +
-                "Tercihiniz :");
+        System.out.print("""
+                1 - Notebook Ekle
+                2 - Notebook Sil
+                3 - Notebook Listele
+                4 - Geri
+                0 - Çıkış Yap
+                Tercihiniz :""");
         switch (getInput(0, 4)){
             case 1:
                 addNotebook(store);
@@ -55,12 +54,12 @@ public class Main {
             case 3:
                 System.out.println( "1 - Tümünü Listele\n" +
                                     "2 - Id Belirterek Listele\n");
-                switch (getInput(1, 2)){
-                    case 1:
-                    case 2:
+                switch (getInput(1, 2)) {
+                    case 1 -> store.getProducts();
+                    case 2 -> {
                         System.out.print("Listelenecek ID'sini giriniz : ");
-                        System.out.println(findProduct(store, scanner.nextInt()).toString());
-                        break;
+                        store.getProduct(scanner.nextInt());
+                    }
                 }
 
             case 4:
@@ -71,12 +70,13 @@ public class Main {
     }
 
     static void phoneMenu(StoreNode store){
-        System.out.print("1 - Phone Ekle\n" +
-                "2 - Phone Sil\n" +
-                "3 - Phone Listele\n" +
-                "4 - Geri\n" +
-                "0 - Çıkış Yap\n" +
-                "Tercihiniz :");
+        System.out.print("""
+                1 - Phone Ekle
+                2 - Phone Sil
+                3 - Phone Listele
+                4 - Geri
+                0 - Çıkış Yap
+                Tercihiniz :""");
         switch (getInput(0, 4)){
             case 1:
                 addPhone(store);
@@ -86,14 +86,24 @@ public class Main {
                 store.removeProduct(scanner.nextInt());
                 break;
             case 3:
-                System.out.println( "1 - Tümünü Listele\n" +
-                        "2 - Id Belirterek Listele\n");
-                switch (getInput(1, 2)){
-                    case 1:
-                    case 2:
+                System.out.println("""
+                        1 - Tümünü Listele
+                        2 - Id Belirterek Listele
+                        """);
+                switch (getInput(1, 2)) {
+                    case 1 -> store.getProducts();
+                    case 2 -> {
                         System.out.print("Listelenecek ID'sini giriniz : ");
-                        System.out.println(findProduct(store, scanner.nextInt()).toString());
+                        Phone phone = null;
+                        try {
+                            phone = (Phone) store.getProduct(scanner.nextInt());
+                            printStore(Arrays.asList(phone));
+                        }catch (ClassCastException | NullPointerException | IllegalAccessException e){
+                            System.err.println(e.getMessage());
+                            System.out.println("Bu ID'ye sahip bir ürün bulunamadı.");
+                        }
                         break;
+                    }
                 }
             case 4:
                 break;
@@ -117,23 +127,32 @@ public class Main {
         return choose;
     }
 
-    static Product findProduct(StoreNode store, int id){
-        try {
-            return store.getProducts().stream()
-                    .filter(p -> p.getId() == id)
-                    .findFirst()
-                    .get();
-        }catch (NoSuchElementException e){
-            System.out.println("Bu ID'ye sahip bir ürün bulunamadı");
-            return new Product();
+    static void printStore(List<Product> products) throws IllegalAccessException {
+        List<Field> l1 = new ArrayList<>();
+        Collections.addAll(l1, products.get(0).getClass().getDeclaredFields());
+        Collections.addAll(l1, products.get(0).getClass().getSuperclass().getDeclaredFields());
+
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+        for(Field field : l1){
+            System.out.printf("| %-10s ",field.getName().toUpperCase() + " ");
         }
+        System.out.println("|");
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+        for(Product product : products){
+            for(Field field : l1){
+                System.out.printf("| %-10s ",field.get(product) + " ");
+            }
+        }
+        System.out.println("|");
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
     }
+
 
     static void addNotebook(StoreNode store){
         System.out.print("İsim : ");
         String name = scanner.next();
         System.out.print("Marka : ");
-        Arrays.asList(Brands.values()).forEach(x->System.out.print((x.ordinal()+1)+"-)"+x.toString()+" "));
+        Arrays.asList(Brands.values()).forEach(x->System.out.print((x.ordinal()+1)+"-)"+x+" "));
         System.out.println();
         Brands brand = Brands.values()[getInput(1, Brands.values().length)-1];
         System.out.print("Fiyat : ");
