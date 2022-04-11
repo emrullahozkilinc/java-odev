@@ -36,7 +36,11 @@ public class StoreNode {
     }
 
     void removeProduct(int id) {
-        products.remove(products.stream().filter(p -> p.getId() == id).findFirst().get());
+        try {
+            products.remove(getProduct(id));
+        }catch (Exception e){
+            System.out.println("Id bulunamadı");
+        }
     }
 
     Product getProduct(int id) {

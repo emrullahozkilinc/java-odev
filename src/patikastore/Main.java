@@ -31,7 +31,6 @@ public class Main {
                     brs.forEach(System.out::println);
                 }
             }
-            System.out.println(phones);
         }
     }
 
@@ -52,16 +51,23 @@ public class Main {
                 store.removeProduct(scanner.nextInt());
                 break;
             case 3:
-                System.out.println( "1 - Tümünü Listele\n" +
-                                    "2 - Id Belirterek Listele\n");
-                switch (getInput(1, 2)) {
-                    case 1 -> store.getProducts();
-                    case 2 -> {
-                        System.out.print("Listelenecek ID'sini giriniz : ");
-                        store.getProduct(scanner.nextInt());
+                System.out.println("""
+                        1 - Tümünü Listele
+                        2 - Id Belirterek Listele
+                        """);
+                try {
+                    switch (getInput(1, 2)) {
+                        case 1 -> printStore(new ArrayList<>(store.getProducts()));
+                        case 2 -> {
+                            System.out.print("Listelenecek ID'sini giriniz : ");
+                            Phone phone = (Phone) store.getProduct(scanner.nextInt());
+                            printStore(List.of(phone));
+                        }
                     }
+                }catch (ClassCastException | NullPointerException | IllegalAccessException e){
+                    System.out.println("Bu ID'ye sahip bir ürün bulunamadı.");
                 }
-
+                break;
             case 4:
                 break;
             case 0:
@@ -90,21 +96,19 @@ public class Main {
                         1 - Tümünü Listele
                         2 - Id Belirterek Listele
                         """);
-                switch (getInput(1, 2)) {
-                    case 1 -> store.getProducts();
-                    case 2 -> {
-                        System.out.print("Listelenecek ID'sini giriniz : ");
-                        Phone phone = null;
-                        try {
-                            phone = (Phone) store.getProduct(scanner.nextInt());
-                            printStore(Arrays.asList(phone));
-                        }catch (ClassCastException | NullPointerException | IllegalAccessException e){
-                            System.err.println(e.getMessage());
-                            System.out.println("Bu ID'ye sahip bir ürün bulunamadı.");
+                try {
+                    switch (getInput(1, 2)) {
+                        case 1 -> printStore(new ArrayList<>(store.getProducts()));
+                        case 2 -> {
+                            System.out.print("Listelenecek ID'sini giriniz : ");
+                            Phone phone = (Phone) store.getProduct(scanner.nextInt());
+                            printStore(List.of(phone));
                         }
-                        break;
                     }
+                }catch (ClassCastException | NullPointerException | IllegalAccessException e){
+                    System.out.println("Bu ID'ye sahip bir ürün bulunamadı.");
                 }
+                break;
             case 4:
                 break;
             case 0:
@@ -128,23 +132,30 @@ public class Main {
     }
 
     static void printStore(List<Product> products) throws IllegalAccessException {
+        if(products.size() == 0){
+            System.out.println("Ürün bulunamadı.");
+            return;
+        }
+
         List<Field> l1 = new ArrayList<>();
         Collections.addAll(l1, products.get(0).getClass().getDeclaredFields());
         Collections.addAll(l1, products.get(0).getClass().getSuperclass().getDeclaredFields());
 
-        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+        int lineSize = 0;
+
         for(Field field : l1){
-            System.out.printf("| %-10s ",field.getName().toUpperCase() + " ");
+            System.out.printf("| %-10s ",field.getName().toUpperCase());
+            lineSize += (13);
         }
         System.out.println("|");
-        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("-".repeat(lineSize+1));
         for(Product product : products){
             for(Field field : l1){
-                System.out.printf("| %-10s ",field.get(product) + " ");
+                System.out.printf("| %-10s ",field.get(product));
             }
         }
         System.out.println("|");
-        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("-".repeat(lineSize+1));
     }
 
 
